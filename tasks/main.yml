@@ -1,0 +1,30 @@
+---
+# tasks file for role-firewalld
+
+- name: Install firewalld
+  yum:
+    name:
+      - firewalld
+    state: latest
+
+- name: Ensure firewalld is enabled/started 
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- block:
+  - set_fact:
+      firewalld_zones: "{{ firewalld_zones }}"
+  - include_tasks: tasks/configure-firewalld.yml
+  when: firewalld_zones is defined
+
+- name: Remove default services from public zone
+  firewalld:
+    zone: public
+    state: disabled
+    permanent: true
+    service: "{{ item }}"
+  with_items: "{{ firewalld_public_zone_default_services }}"
+  notify: reload firewalld
+  when: firewalld_remove_default_public_services

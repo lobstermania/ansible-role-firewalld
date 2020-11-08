@@ -1,0 +1,64 @@
+- name: Create zones
+  firewalld:
+    state: present
+    zone: "{{ item.zone }}"
+    permanent: true
+  with_items: "{{ firewalld_zones }}"
+  register: create_zone
+
+- name: Reload firewalld to activate zones
+  shell: "firewall-cmd --reload"
+  when: create_zone.changed
+
+- name: Add zone sources
+  firewalld:
+    zone: "{{ item[0].zone }}"
+    source: "{{ item[1] }}"
+    state: enabled
+    permanent: true
+  with_subelements:
+    - "{{ firewalld_zones }}"
+    - src
+    - flags:
+      skip_missing: True
+  notify: reload firewalld
+
+- name: Add zone interfaces
+  firewalld:
+    zone: "{{ item[0].zone }}"
+    interface:  "{{ item[1] }}"
+    state: enabled
+    permanent: true
+  with_subelements:
+    - "{{ firewalld_zones }}"
+    - interfaces
+    - flags:
+      skip_missing: True
+  notify: reload firewalld
+
+- name: Add zone services
+  firewalld:
+    zone: "{{ item[0].zone }}"
+    service: "{{ item[1] }}"
+    state: enabled
+    permanent: true
+  with_subelements:
+    - "{{ firewalld_zones }}"
+    - services
+    - flags:
+      skip_missing: True
+  notify: reload firewalld
+
+- name: Add zone ports
+  firewalld:
+    zone: "{{ item[0].zone }}"
+    port: "{{ item[1] }}"
+    state: enabled
+    permanent: true
+  with_subelements:
+    - "{{ firewalld_zones }}"
+    - ports
+    - flags:
+      skip_missing: True
+  notify: reload firewalld
+

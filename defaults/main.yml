@@ -1,0 +1,19 @@
+---
+# defaults file for role-firewall
+
+firewalld_remove_default_public_services: False
+
+# Example zone config
+
+#firewalld_zones:
+#  - zone: myzone
+#    services:
+#      - https
+#      - http
+#    interfaces:
+#      - eth0
+#  - zone: myzone_2
+#    ports:
+#      - 1234-1237/tcp
+#    src:
+#      - 12.13.14.15/24

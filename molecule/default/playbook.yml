@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  pre_tasks:
+    - name: Ensure cron is installed on the test container
+      yum:
+        name: cronie
+        state: present
+  roles:
+    - role: role-firewalld

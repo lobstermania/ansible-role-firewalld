@@ -1,0 +1,7 @@
+---
+# vars file for role-firewalld
+
+firewalld_public_zone_default_services:
+  - ssh
+  - mdns
+  - dhcpv6-client
