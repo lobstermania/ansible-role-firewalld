@@ -1,4 +1,4 @@
-Role Name
+ansible-role-firewalld
 =========
 
 Ansible role to configure firewalld zones.
